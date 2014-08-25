@@ -1,0 +1,11 @@
+{
+  "name": "scramble-image",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "",
+  "license": "",
+  "private": true,
+  "dependencies": {
+    "knockout": "3.2.x"
+  }
+}
