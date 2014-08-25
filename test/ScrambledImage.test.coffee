@@ -3,17 +3,11 @@ ScrambledImage050 test
 ###
 
 expect = require 'expect.js'
-ScrambledImage = require '../bin/ScrambledImage.js'
+scrambledImage = require '../bin/ScrambledImage.js'
 
 describe "ScrambledImage050", ->
 
-    # beforeEach ->
-    #   @simg = new ScrambledImage.ScrambledImage "/bin/sample.jpg",
-    #     seed: 1
-    #     height: 8
-    #     width: 8
-
-    simg = new ScrambledImage.ScrambledImage "/bin/sample.jpg",
+    simg = new scrambledImage.ScrambledImage "/bin/sample.jpg",
         seed: 1
         height: 8
         width: 8
