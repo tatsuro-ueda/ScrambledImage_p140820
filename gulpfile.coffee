@@ -13,6 +13,7 @@ gulp.task('js', ->
 
 gulp.task('watch', ->
   gulp.watch([
+    'bin/*.js'
     'bin/*.coffee'
     'test/*.coffee'
   ], -> 
@@ -26,6 +27,9 @@ gulp.task('default', ->
 )
 
 gulp.task('test', ->
-  gulp.src('test/*.test.coffee')
+  gulp.src([
+    'test/*.test.coffee'
+    'bin/ScrambledImage.js'
+  ])
     .pipe(mocha {reporter: 'spec'})
 )

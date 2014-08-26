@@ -10,7 +10,7 @@ import js.Lib;
 class Main {
 	
 	static function main() {
-		var si = new ScrambledImage( "../bin/sample.jpg", 1, 8, 8 );
+		var si = new ScrambledImage( "../bin/sample.jpg", { seed : 1, height : 8, width : 8 } );
 		var f = new FizzBuzz();
 	}
 	
