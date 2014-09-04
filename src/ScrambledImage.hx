@@ -14,7 +14,7 @@ class ScrambledImage{
 	var context : CanvasRenderingContext2D = null;
 	var canvas : CanvasElement = null;
 	var canvasId : String = null;
-	var seed : Int = null;
+	var seed : String = null;
 	// HeightPartitionNum
 	var height : Int = null;
 	// WidthPartitionNum
@@ -33,17 +33,18 @@ class ScrambledImage{
 	}
 	
 	public function getShuffleArray_() {
-		var r = new Random( this.seed );
+		var i = Std.parseInt( this.seed );
+		var r = new Random( i );
 		var array = [];
 		var sizeofMatrix : Int = this.height * this.width;
 		
-		// At first, make a[] list as [1, 2, 3..., (sizeof_matrix - 1)]
-		for ( i in 0...sizeofMatrix ) {
+		// At first, make array[] list as [1, 2, 3..., (sizeof_matrix - 1)]
+		for ( i in 1...sizeofMatrix ) {
 			array[ i ] = i;
 		}
 		
-		// Then, randomize a[] list by Fisher–Yates shuffle algorithm
-		for ( i in 0...sizeofMatrix ) {
+		// Then, randomize array[] list by Fisher–Yates shuffle algorithm
+		for ( i in 1...sizeofMatrix ) {
 			var j = Math.floor( r.float() * ( i + 1 ) );
 			var tmp : Int = array[ i ];
 			array[ i ] = array [ j ];

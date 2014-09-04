@@ -4,16 +4,16 @@ ScrambledImage050 test
  */
 
 (function() {
-  var expect, scrambledImage;
+  var ScrambledImage, expect;
 
   expect = require('expect.js');
 
-  scrambledImage = require('../bin/ScrambledImage.js');
+  ScrambledImage = require('../bin/ScrambledImage.js');
 
   describe("ScrambledImage050", function() {
     var simg;
-    simg = new scrambledImage.ScrambledImage("/bin/sample.jpg", {
-      seed: 1,
+    simg = new ScrambledImage.ScrambledImage("/bin/sample.jpg", {
+      seed: "todo",
       height: 8,
       width: 8
     });

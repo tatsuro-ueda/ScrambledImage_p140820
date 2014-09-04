@@ -8,7 +8,7 @@ ScrambledImage = require '../bin/ScrambledImage.js'
 describe "ScrambledImage050", ->
 
     simg = new ScrambledImage.ScrambledImage( "/bin/sample.jpg",
-        { seed: 1
+        { seed: "todo"
         height: 8
         width: 8 }
     )
