@@ -1,163 +1,204 @@
 /**
-* Rndm by Grant Skinner. Jan 15, 2008
-* Visit www.gskinner.com/blog for documentation, updates and more free code.
-*
-* Incorporates implementation of the Park Miller (1988) "minimal standard" linear 
-* congruential pseudo-random number generator by Michael Baczynski, www.polygonal.de.
-* (seed * 16807) % 2147483647
-*
-*
-*
-* Copyright (c) 2008 Grant Skinner
-* 
-* Permission is hereby granted, free of charge, to any person
-* obtaining a copy of this software and associated documentation
-* files (the "Software"), to deal in the Software without
-* restriction, including without limitation the rights to use,
-* copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the
-* Software is furnished to do so, subject to the following
-* conditions:
-* 
-* The above copyright notice and this permission notice shall be
-* included in all copies or substantial portions of the Software.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-* OTHER DEALINGS IN THE SOFTWARE.
-*/
+ * Bits of this harvested from different places on the internet at some point or another. Modified lots now.
+ * 
+ * @author Andy Moore
+ */
 
-// Provides common random functions using a seeded random system. Can be used through static interface or via instantiation.
-
-class Rndm {
-// static interface:
-	// NOTE: for usage information, look at the instance methods below.
-
-	static var _instance : Rndm;
-	
-	public static var instance( get, null ) : Rndm;
-	static function get_instance() {
-		if (_instance == null) { _instance = new Rndm(); }
-		return _instance;
+class Rndm {	
+	/**
+	 * Random float generator
+	 * @param	min	exclusive minimum.
+	 * @param	?max	exclusive maximum
+	 * @return	float value
+	 */	
+	public static function float(min:Float, max:Float = 0):Float {
+		if (max == 0) { max = min; min = 0; } 
+		return random()*(max-min)+min;
 	}
 	
-	public static var seed( get, set ) : UInt;
-	public static function get_seed() : UInt {
-		return instance.seed;
-	}
-	public static function set_seed( value : UInt ) : Void {
-		instance.seed = value;
-	}
-	
-	public static var staticCurrentSeed( get, null ) : UInt;
-	public static function get_staticCurrentSeed() : UInt {
-		return instance.staticCurrentSeed;
+	/**
+	 * Random boolean generator
+	 * @param	chance	percentage (0...1) of success
+	 * @return	Returns true if success, false if failure
+	 */
+	public static function bool(chance:Float=0.5):Bool {
+		return (random() < chance);
 	}
 	
-	public static function random() : Float {
-		return instance.random();
+	/**
+	 * Random sign generator
+	 * @param	chance	percentage (0...1) of success
+	 * @return	returns 1 if success, 0 if failure
+	 */
+	public static function sign(chance:Float=0.5):Int {
+		return (random() < chance) ? 1 : -1;
 	}
 	
-	public static function float( min : Float, max : Float = Math.NaN) : Float {
-		return instance.float( min, max );
+	/**
+	 * Random bit generator
+	 * @param	chance	percentage (0...1) of success)
+	 * @return	1 if success, 0 if failure
+	 */
+	public static function bit(chance:Float=0.5):Int {
+		return (random() < chance) ? 1 : 0;
 	}
 	
-	public static function boolean( chance : Float = 0.5 ) : Bool {
-		return instance.boolean(chance);
-	}
-	
-	public static function sign( chance : Float = 0.5 ) : Int {
-		return instance.sign( chance );
-	}
-	
-	public static function bit( chance : Float = 0.5) : Int {
-		return instance.bit( chance );
-	}
-	
-	public static function integer( min : Float, max : Float = Math.NaN) : Int {
-		return instance.integer( min, max );
-	}
-	
-	public static function reset() : Void {
-		instance.reset();
-	}
-	
-// constants:
-// private properties:
-	var _seed : UInt = 0;
-	var _currentSeed : UInt = 0;
-
-// public properties:
-	
-// constructor:
-	public function Rndm( seed : UInt = 1 ) {
-		_seed = _currentSeed = seed;
-	}
-	
-// public getter/setters:
-
-	// seed = Math.random()*0xFFFFFF; // sets a random seed
-	// seed = 50; // sets a static seed
-	public var seed( get, set ) : UInt;
-	public function get_seed() : UInt {
-		return _seed;
-	}
-	public function set_seed( value : UInt) : Void {
-		_seed = _currentSeed = value;
-	}
-	
-	// gets the current seed
-	public var currentSeed( get, null ) : UInt;
-	public function get_currentSeed() : UInt {
-		return _currentSeed;
-	}
-
-// public methods:
-	// random(); // returns a number between 0-1 exclusive.
-	public function random() : Float {
-		return ( _currentSeed = (_currentSeed * 16807) % 2147483647) / 0x7FFFFFFF+0.000000000233;
-	}
-	
-	// float(50); // returns a number between 0-50 exclusive
-	// float(20,50); // returns a number between 20-50 exclusive
-	public function float( min : Float, max : Float = Math.NaN) : Float {
-		if ( isNaN( max ) ) { max = min; min=0; }
-		return random() * ( max - min ) + min;
-	}
-	
-	// boolean(); // returns true or false (50% chance of true)
-	// boolean(0.8); // returns true or false (80% chance of true)
-	public function boolean( chance : Float = 0.5 ) : Bool {
-		return ( random() < chance );
-	}
-	
-	// sign(); // returns 1 or -1 (50% chance of 1)
-	// sign(0.8); // returns 1 or -1 (80% chance of 1)
-	public function sign( chance : Float = 0.5 ) : Int {
-		return if( random() < chance ) 1 else -1;
-	}
-	
-	// bit(); // returns 1 or 0 (50% chance of 1)
-	// bit(0.8); // returns 1 or 0 (80% chance of 1)
-	public function bit( chance : Float = 0.5 ) : Int {
-		return if( random() < chance ) 1 else 0;
-	}
-	
-	// integer(50); // returns an integer between 0-49 inclusive
-	// integer(20,50); // returns an integer between 20-49 inclusive
-	public function integer( min : Float, max : Float = Math.NaN ) : Int { /////////////ここまで
-		if (isNaN(max)) { max = min; min=0; }
+	/**
+	 * Random integer generator.
+	 * @param	minInclusive	inclusive minimum
+	 * @param	?maxExclusive	exclusive maximum. If null, minimum becomes 0 and maximum becomes min.
+	 * @return	Returns the integer.
+	 */
+	public static function integer(minInclusive:Float, maxExclusive:Float=0):Int {
+		var min:Float = minInclusive;
+		var max:Float = maxExclusive;
+		if (max == 0) { max = min; min=0; }
 		// Need to use floor instead of bit shift to work properly with negative values:
 		return Math.floor(float(min,max));
 	}
 	
-	// reset(); // resets the number series, retaining the same seed
-	public function reset():void {
-		_seed = _currentSeed;
+	/**
+	 * Random character from string
+	 * @param	string	The string to pull the character from
+	 * @return	a single character
+	 */
+	public static function charFromString(string:String):String {
+		return string.charAt(integer(0, string.length));
 	}
+	
+	// ### These are used for random word generation
+	private static inline var commonVowels:String		= 'aeio';
+	private static inline var allVowels:String			= 'aeiouy';
+	private static inline var commonConsonants:String	= 'bcdglmnprst';
+	private static inline var allConsonants:String 		= 'bcdfghjklmnpqrstvwxz';
+	private static inline var floats:String 			= '0123456789';
+	private static inline var symbols:String 			= '!@#$%^&*()';
+	
+	/**
+	 * This is used internally by generateWord and generatePassword
+	 * @param	length
+	 * @param	setA
+	 * @param	setB
+	 * @return
+	 */
+	static function generateWordFromTwoSets(length:Int, setA:String, setB:String):String {
+		var theWord = "";
+		var alt = bool();
+		for (i in 0...length) {
+			if (alt) {
+				theWord += charFromString(setA);
+			} else {
+				theWord += charFromString(setB);
+			}
+			alt = !alt;
+		}
+		return theWord;
+	}
+	/**
+	 * Using common consonants and vowels, generates a regularish-sounding-word
+	 * @param	length	How long the word should be.
+	 * @return	returns the generated word.
+	 */
+	public static function generateWord(length:Int = 6):String {
+		return generateWordFromTwoSets(length, commonVowels, commonConsonants);
+	}
+	
+	/**
+	 * Using randomish character selection, generates a zany password thing
+	 * @param	length	how long the password should be
+	 * @param	strength	Setting of 0..4 (inclusive) that increases password complexity. 0 is simple (letters only), 4 includes symbols and numbers
+	 * @return	String of the generated password
+	 */
+	public static function generatePassword(length:Int = 9, strength:Int = 0):String {
+		var vowels = allVowels;
+		var consonants = allConsonants;
+		if (strength == 0) {
+			// No changes for strength 0.
+		} else if (strength == 1) {
+			// let's add uppercase.
+			consonants += consonants.toUpperCase();
+			vowels += vowels.toUpperCase();
+		} else if (strength == 2) {
+			// Add numbers in, but only for vowels
+			vowels += floats;
+		} else if (strength == 3) {
+			// Add symbols but only for consonants
+			consonants += symbols;
+		} else if (strength == 4) {
+			// fuck the alternating BS that makes it englishy
+			vowels += symbols;
+			consonants += floats;
+		}
+		return generateWordFromTwoSets(length, vowels, consonants);
+	}
+
+	/**
+	 * Rolls dice and stores value in .lastStaticDiceRoll for later retrieval.
+	 * @param	diceSides	Number of dice sides
+	 * @param	numberOfDice	Number of dice to roll.
+	 * @return integer assuming no zero-faces on your dice.
+	 */
+	public static function staticDice(diceSides:Int, numberOfDice:Int):Int {
+		var value = integer(1, (diceSides * numberOfDice) + 1);
+		lastStaticDiceRoll = value;
+		return value;
+	}
+	
+	
+	
+	
+	// ### INTERNAL STUFFS. ===========================================================
+	// IGNORE!!
+	// Unless you want to set the seed or something. even though there's functions for that.
+	
+	static var _seed:Float = 0; // on some platforms Float initializes differently
+	static var _currentSeed:Float = 0; // on some platforms Float initializes differently
+	public static var lastStaticDiceRoll:Int;
+	
+	/**
+	 * Randomizes the current seed based on the current date and time.
+	 */
+	public static function randomizeSeed() {
+		seed = Date.now().getTime();
+	}
+	
+	public static var seed(get, set):Float;
+	static function get_seed():Float {
+		if (_seed == 0) randomizeSeed();
+		return _seed;
+	}
+	static function set_seed(value:Float) {
+		_currentSeed = value;
+		_seed = value;
+		return value;
+	}
+		
+	public static var currentSeed(get, null):Float;
+	static function get_currentSeed():Float {
+		if (_currentSeed == 0) randomizeSeed();
+		return _currentSeed;
+	}
+	
+	public static var useForNextSeedOnly:Float = 0;
+	public static function random():Float {
+		if (useForNextSeedOnly != 0) {
+			// This allows us to generate just a signal number in a sequence from a given seed.
+			var temp = useForNextSeedOnly;
+			useForNextSeedOnly = 0;
+			return ((temp * 16807) % 2147483647) / 0x7FFFFFFF + 0.000000000233;
+		} else {
+			// Standard random number generation.
+			return (_currentSeed = (currentSeed * 16807) % 2147483647) / 0x7FFFFFFF + 0.000000000233;
+		}
+	}
+	
+	/**
+	 * Resets the random number sequence while retaining the set seed.
+	 */
+	public static function reset():Void {
+		_currentSeed = _seed;
+	}	
+	
+	public function new() {	throw "Don't new this Rndm class! You fool"; }
+		
 }
